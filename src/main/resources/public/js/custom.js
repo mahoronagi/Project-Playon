@@ -398,7 +398,7 @@ function template_functions(){
 		else 					   $('i',$(this)).removeClass('chevron-down').addClass('chevron-up');
 		$target.slideToggle();
 	});
-	$('.btn-setting').click(function(e){
+	$('.btn-danger').click(function(e){
 		e.preventDefault();
 		$('#myModal').modal('show');
 	});

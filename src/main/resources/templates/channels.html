@@ -22,14 +22,14 @@
                         <a href="/index">Home</a> 
                         <i class="icon-angle-right"></i>
                     </li>
-                    <li><a href="#">Package</a></li>
+                    <li><a href="#">Channels</a></li>
                 </ul>
                 <!--Table-->	
                 <div class="box span12">
                     <div class="box-header" data-original-title>
-                        <h2><i class="halflings-icon white user"></i><span class="break"></span>Package</h2>
+                        <h2><i class="halflings-icon white user"></i><span class="break"></span>Channels</h2>
                         <div class="box-icon">
-                            <a href="/add_package" class="btn-default" style="color: whitesmoke;"><i class="halflings-icon white plus"></i>Add Package</a>
+                            <a href="/add_channel" class="btn-default" style="color: whitesmoke;"><i class="halflings-icon white plus"></i>Add Channel</a>
                         </div>
                     </div>
                     <div class="box-content">
@@ -37,19 +37,27 @@
                             <thead>
                                 <tr>
                                     <th>Sort</th>
-                                    <th>Package Name</th>
+                                    <th>Img</th>
+                                    <th>Channel ID</th>
+                                    <th>Channel Name</th>
+                                    <th>Channel Code</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead> 
                             <tbody>
-                                <#list package as p>
+                                <#if channel?has_content>
+                                <#list channel as ch>
                                 <tr>
-                                    <td>${p?counter}</td>
-                                    <td class="center">${p.name}</td>
+                                    <td>${ch.getID()}</td>
                                     <td class="center">
-                                        <a class="btn btn-success" href="detail?id=${p.getID()}">
-                                            <i class="halflings-icon white zoom-in"></i>  
+                                        <a href="#">
+                                            <img class="avatar" alt="Dennis Ji" src="${ch}">
                                         </a>
+                                    </td>
+                                    <td class="center">${ch.getChName()}</td>
+                                    <td class="center">${ch.getChName()}</td>
+                                    <td class="center">${ch.getChCode()}</td>
+                                    <td class="center">
                                         <a class="btn btn-info" href="#">
                                             <i class="halflings-icon white edit"></i>  
                                         </a>
@@ -59,11 +67,12 @@
                                     </td>
                                 </tr>
                                 </#list>
+                                </#if>
                             </tbody>
                         </table>            
                     </div>
                 </div>
-                <!--End Table-->
+                <!--Enf Table-->
 
                 <!-- end: Content -->
             </div><!--/#content.span10-->

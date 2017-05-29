@@ -280,21 +280,7 @@ public class Web {
         Member m = (Member)session.getAttribute("member");
 		if (m == null) {
 			return "redirect:/login";
-		}     
-        /*try {
-            Connection c = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
-            Statement s = c.createStatement();
-            ResultSet r = s.executeQuery("select * from role");
-            while (r.next()) {
-                Role role = new Role();
-                role.roleID = r.getInt("id");
-                role.roleName = r.getString("role_name");
-                a.add(role);
-            }
-            r.close();
-            s.close();
-            c.close();
-        } catch (Exception e) { }    */   
+		}      
         model.addAttribute("user", m.user);
         return "newprovider";
     }
@@ -367,6 +353,16 @@ public class Web {
         model.addAttribute("package", a);
         return "package";
     }
+    
+    @RequestMapping("/add_package")
+    String showPackageIns(HttpSession session,Model model) {
+        Member m = (Member)session.getAttribute("member");
+		if (m == null) {
+			return "redirect:/login";
+		}
+                model.addAttribute("user", m.user);
+        return "add_package";
+    }
 
     @RequestMapping("/channels")
     String showChannel(HttpSession session,Model model) {
@@ -396,6 +392,56 @@ public class Web {
         model.addAttribute("channel", a);
         return "channels";
     }
+    
+    @RequestMapping("/add_channel")
+    String showChannelIns(HttpSession session,Model model){
+        Member m = (Member)session.getAttribute("member");
+        if (m == null) {
+                    return "redirect:/login";
+            }
+        model.addAttribute("user", m.user);
+        return "add_channel";
+    }
+            
+    @RequestMapping(value="/add_channel", method = RequestMethod.POST)
+    String showChannelIns(HttpSession session,Model model, String channel_name, String ch, String url, MultipartFile Image) {
+        Member m = (Member)session.getAttribute("member");
+        boolean pass = false;
+            if (m == null) {
+                    return "redirect:/login";
+            }
+            try {
+                String fileName = null;
+                if (Image != null) {
+                        fileName = "./src/main/resource/public/img/ch/" +
+                                        "photo-" + (int)(Math.random() * 1000000) + ".jpg";
+                        FileOutputStream fos = new FileOutputStream(fileName);
+                        byte [ ] data = Image.getBytes();
+                        for (byte b : data) {
+                                fos.write(b);
+                        }
+                        fos.close();
+                }
+                String sql = "insert into playon365.channel (channel_name, channel_id, channel_code, img) " 
+                                + "values(?,?,?,?)";
+                System.out.println(channel_name+ch+url+Image);
+                Connection c = DriverManager.getConnection(dbUrl,dbUser,dbPassword);
+                PreparedStatement p = c.prepareStatement(sql);
+                p.setString(1, channel_name);
+                p.setString(2, ch);
+                p.setString(3, url);
+                p.setString(4, fileName);
+                p.execute();
+                p.close(); c.close();
+                pass = true;
+            } catch (Exception e) { System.out.println(e);}
+            model.addAttribute("user", m.user);
+        if(pass=true){  
+            return "redirect:/channels";
+        }else{
+            return "redirect:/add_channel";
+        }
+    }
 
     @RequestMapping("/schedule")
     String showSchedule(HttpSession session,Model model) {
@@ -403,8 +449,109 @@ public class Web {
 		if (m == null) {
 			return "redirect:/login";
 		}
+                
                 model.addAttribute("user", m.user);
         return "schedule";
+    }
+    
+    @RequestMapping("/sports")
+    String showSoprts(HttpSession session, Model model) {
+        ArrayList a = new ArrayList();
+        Member m = (Member) session.getAttribute("member");
+        if (m == null) {
+            return "redirect:/login";
+        }
+        try {
+            Connection c = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+            Statement s = c.createStatement();
+            ResultSet r = s.executeQuery("select * from sports");
+            while (r.next()) {
+                Sports p = new Sports();
+                p.id = r.getInt("id");
+                p.nameEN = r.getString("sports_en");
+                p.nameTH = r.getString("sports_th");
+                p.nameCN = r.getString("sports_cn");
+                p.logo = r.getString("sp_logo");
+                a.add(p);
+            }
+            r.close();
+            s.close();
+            c.close();
+        } catch (Exception e) {
+        }
+        model.addAttribute("user", m.user);
+        model.addAttribute("sports", a);
+        return "sports";
+    }
+    
+    @RequestMapping("/leagues")
+    String showLeagues(HttpSession session,Model model) {
+        ArrayList a = new ArrayList();
+        Member m = (Member)session.getAttribute("member");
+        if (m == null) {
+            return "redirect:/login";
+        }
+        try {
+            Connection c = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+            Statement s = c.createStatement();
+            ResultSet r = s.executeQuery("select * from leagues");
+            while (r.next()) {
+                Leagues p = new Leagues();
+                p.id = r.getInt("id");
+                p.spID = r.getInt("sport_id");
+                p.nameEN = r.getString("leagues_en");
+                p.nameTH = r.getString("leagues_th");
+                p.nameCN = r.getString("leagues_cn");
+                p.logo = r.getString("lg_logo");
+                a.add(p);
+            }
+            r.close();
+            s.close();
+            c.close();
+        } catch (Exception e) {
+        }
+        model.addAttribute("user", m.user);
+        model.addAttribute("lg", a);
+        return "leagues";
+    }
+    
+    @RequestMapping("/teams")
+    String showTeam(HttpSession session,Model model) {
+        Member m = (Member)session.getAttribute("member");
+		if (m == null) {
+			return "redirect:/login";
+		}
+                model.addAttribute("user", m.user);
+        return "teams";
+    }
+    
+    @RequestMapping("/new_sport")
+    String insSoprts(HttpSession session,Model model) {
+        Member m = (Member)session.getAttribute("member");
+		if (m == null) {
+			return "redirect:/login";
+		}
+                model.addAttribute("user", m.user);
+        return "new_sport";
+    }
+    @RequestMapping("/new_leagues")
+    String insLeagues(HttpSession session,Model model) {
+        Member m = (Member)session.getAttribute("member");
+		if (m == null) {
+			return "redirect:/login";
+		}
+                model.addAttribute("user", m.user);
+        return "new_leagues";
+    }
+    
+    @RequestMapping("/new_team")
+    String insTeam(HttpSession session,Model model) {
+        Member m = (Member)session.getAttribute("member");
+		if (m == null) {
+			return "redirect:/login";
+		}
+                model.addAttribute("user", m.user);
+        return "new_team";
     }
     
     @RequestMapping("/reports")
