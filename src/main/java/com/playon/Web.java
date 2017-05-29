@@ -12,9 +12,9 @@ import org.springframework.web.multipart.*;
 @Controller
 public class Web {
 
-    String dbUrl = "jdbc:mysql://localhost/playon365?characterEncoding=UTF-8";
+    String dbUrl = "jdbc:mysql://104.155.230.50:3306/playon365?characterEncoding=UTF-8";
     String dbUser = "root";
-    String dbPassword = "1234";
+    String dbPassword = "";
 
     Web() {
         try {
@@ -173,8 +173,7 @@ public class Web {
             r.close();
             s.close();
             c.close();
-        } catch (Exception e) {
-        }
+        } catch (Exception e) { }
         model.addAttribute("user", m.user);
         model.addAttribute("member", a);
         return "admin";
@@ -208,54 +207,194 @@ public class Web {
     }
     
     @RequestMapping(value="/newadmin", method = RequestMethod.POST)
-    String showNewAdminIns(HttpSession session, Model model, String user, String password, int role) {
+    String showNewAdminIns(HttpSession session, Model model, String username, String password, int role) {
         Member m = (Member)session.getAttribute("member");
-		if (m == null) {
-			return "redirect:/login";
-		}
-                /*
+            if (m == null) {
+                    return "redirect:/login";
+            }
         try {
-            String sql = "insert into member(user, password, role, time_create, time_edit) " 
-                       + "values(?,?,?,now(), now())";
-            Connection c = DriverManager.getConnection(dbUrl,dbUser,dbPassword);
-            PreparedStatement p = c.prepareStatement(sql);
-            p.setString(1, user);
-            p.setString(2, password);
-            p.setInt(3, role);
-            p.execute();
-            p.close(); c.close();
-		} catch (Exception e) { }       */    
-        return "admin";
+            String n ="";
+            String sqlname = "select * from member where user = ?";
+            Connection c = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+            PreparedStatement pn = c.prepareStatement(sqlname);
+            pn.setString(1, username);
+            ResultSet rn = pn.executeQuery();
+            while (rn.next()) {
+                n = rn.getString("user");
+            }
+            if(username.equals(n)){
+                System.out.println("user same");
+                model.addAttribute("user", m.user);
+                return "redirect:/newadmin";
+            }else{
+                String sql = "insert into member(user, password, role) " 
+                           + "values(?,sha2(?,512),?)";
+                PreparedStatement p = c.prepareStatement(sql);
+                p.setString(1, username);
+                p.setString(2, password);
+                p.setInt(3, role);
+                p.execute(); p.close(); c.close();
+                System.out.println("OK insert");
+            }
+	} catch (Exception e) { }  
+        model.addAttribute("user", m.user);
+        return "redirect:/admin";
     }
 
     @RequestMapping("/provider")
     String showProvider(HttpSession session,Model model) {
+        ArrayList a = new ArrayList();
         Member m = (Member)session.getAttribute("member");
 		if (m == null) {
 			return "redirect:/login";
 		}
-                model.addAttribute("user", m.user);
+                try {
+            Connection c = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+            Statement s = c.createStatement();
+            ResultSet r = s.executeQuery("select * from provider");
+            while (r.next()) {
+                Provider p = new Provider();
+                p.id = r.getInt("id");
+                p.name = r.getString("provider_name");
+                p.url = r.getString("url");
+                p.domain = r.getString("domain");
+                p.ip = r.getString("ip_host");
+                p.type = r.getString("type");
+                p.upackage = r.getString("package");
+                p.DateS = r.getString("date_start");
+                p.DateE = r.getString("date_end");
+                a.add(p);
+            }
+            r.close();
+            s.close();
+            c.close();
+        } catch (Exception e) { } 
+        model.addAttribute("user", m.user);
+        model.addAttribute("provider", a);
         return "provider";
+    }
+    
+    @RequestMapping("/newprovider")
+    String showNewProvider(HttpSession session, Model model) {
+        ArrayList a = new ArrayList();
+        Member m = (Member)session.getAttribute("member");
+		if (m == null) {
+			return "redirect:/login";
+		}     
+        /*try {
+            Connection c = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+            Statement s = c.createStatement();
+            ResultSet r = s.executeQuery("select * from role");
+            while (r.next()) {
+                Role role = new Role();
+                role.roleID = r.getInt("id");
+                role.roleName = r.getString("role_name");
+                a.add(role);
+            }
+            r.close();
+            s.close();
+            c.close();
+        } catch (Exception e) { }    */   
+        model.addAttribute("user", m.user);
+        return "newprovider";
+    }
+    
+    @RequestMapping(value="/newprovider", method = RequestMethod.POST)
+    String showNewProviderIns(HttpSession session, Model model, 
+        String provider_name, String domain, String ip, String url, String p_package, String type,
+        String date_start, String date_end) {
+        Member m = (Member)session.getAttribute("member");
+        FormatDate d = new FormatDate();
+            if (m == null) {
+                    return "redirect:/login";
+            }
+        try {
+            String n ="";
+            String sqlname = "select * from provider where provider_name = ?";
+            Connection c = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+            PreparedStatement pn = c.prepareStatement(sqlname);
+            pn.setString(1, provider_name);
+            ResultSet rn = pn.executeQuery();
+            while (rn.next()) {
+                n = rn.getString("provider_name");
+            }
+            if(provider_name.equals(n)){
+                System.out.println("false");
+                model.addAttribute("user", m.user);
+                return "redirect:/newprovider";
+            }else{
+                String sql = "insert into provider(provider_name, domain, ip_host,"
+                            + "url, package, type, date_start, date_end) " 
+                           + "values(?,?,?,?,?,?,?,?)";
+                PreparedStatement p = c.prepareStatement(sql);
+                p.setString(1, provider_name);
+                p.setString(2, domain);
+                p.setString(3, ip);
+                p.setString(4, url);
+                p.setString(5, p_package);
+                p.setString(6, type);
+                p.setString(7, d.formatDate(date_start));
+                p.setString(8, d.formatDate(date_end));
+                p.execute(); p.close(); c.close();
+                System.out.println("OK insert");
+            }
+	} catch (Exception e) { System.out.println(e);}  
+        return "redirect:/provider";
     }
 
     @RequestMapping("/package")
     String showPackage(HttpSession session,Model model) {
+        ArrayList a = new ArrayList();
         Member m = (Member)session.getAttribute("member");
 		if (m == null) {
 			return "redirect:/login";
 		}
-                model.addAttribute("user", m.user);
+        try {
+            Connection c = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+            Statement s = c.createStatement();
+            ResultSet r = s.executeQuery("select * from package");
+            while (r.next()) {
+                Package p = new Package();
+                p.id = r.getInt("id");
+                p.name = r.getString("package_name");
+                a.add(p);
+            }
+            r.close();
+            s.close();
+            c.close();
+        } catch (Exception e) { } 
+        model.addAttribute("user", m.user);
+        model.addAttribute("package", a);
         return "package";
     }
 
-    @RequestMapping("/channel")
+    @RequestMapping("/channels")
     String showChannel(HttpSession session,Model model) {
+        ArrayList a = new ArrayList();
         Member m = (Member)session.getAttribute("member");
 		if (m == null) {
 			return "redirect:/login";
 		}
-                model.addAttribute("user", m.user);
-        return "channel";
+        try {
+            Connection c = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+            Statement s = c.createStatement();
+            ResultSet r = s.executeQuery("select * from channel");
+            while (r.next()) {
+                Channel p = new Channel();
+                p.id = r.getLong("id");
+                p.ChImg = r.getString("img");
+                p.ChID = r.getLong("channel_id");
+                p.name = r.getString("channel_name");
+                p.code = r.getString("channel_code");
+                a.add(p);
+            }
+            r.close();
+            s.close();
+            c.close();
+        } catch (Exception e) { } 
+        model.addAttribute("user", m.user);
+        model.addAttribute("channel", a);
+        return "channels";
     }
 
     @RequestMapping("/schedule")
