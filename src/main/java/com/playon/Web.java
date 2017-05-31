@@ -1,6 +1,7 @@
 package com.playon;
 
 import java.io.*;
+import java.net.*;
 import java.sql.*;
 import java.util.*;
 import javax.servlet.http.*;
@@ -35,11 +36,14 @@ public class Web {
     }
 
     @RequestMapping("/index")
-    String showHomeIndex(HttpSession session,Model model) {
+    String showHomeIndex(HttpSession session,Model model, HttpServletRequest request ) {
         Member m = (Member)session.getAttribute("member");
 		if (m == null) {
 			return "redirect:/login";
 		}
+                InetAddress ip = InetAddress.getLoopbackAddress();
+                System.out.println(ip);
+                model.addAttribute("ip",request.getRemoteAddr());
 		model.addAttribute("user", m.user);
         return "index";
     }
