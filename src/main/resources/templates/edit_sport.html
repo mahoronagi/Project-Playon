@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<#include "header.html">
+
+<body>
+    <!-- start: Header -->
+    <#include "header-menu.html">
+    <!-- start: Header -->
+
+    <div class="container-fluid-full">
+        <div class="row-fluid">
+
+            <!-- start: Main Menu -->
+            <#include "left-menu.html">
+            <!-- end: Main Menu -->
+
+
+            <!-- start: Content -->
+            <div id="content" class="span10">
+
+
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="/index">Home</a> 
+                        <i class="icon-angle-right"></i>
+                    </li>
+                    <li><a href="#">Dashboard</a></li>
+                </ul>
+                <div class="box span11">
+                    <div class="box-header" data-original-title="">
+                        <h2><i class="halflings-icon white edit"></i><span class="break"></span>Edit Password</h2>
+                    </div>
+                    <div class="box-content">
+                        <form class="form-horizontal" method="post"  enctype="multipart/form-data">
+                            <fieldset>
+                                <div class="control-group">
+                                    <label class="control-label" for="focusedInput">Sport Name (EN)</label>
+                                    <div class="controls">
+                                        <input class="form-control" type="text" name="sport_en" value="${sports.getNameEN()}" />  
+                                        <div id="errLast"></div>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="focusedInput">Sport Name (TH)</label>
+                                    <div class="controls">
+                                        <input class="form-control" type="text" name="sport_th" value="${sports.getNameTH()}"/>  
+                                        <div id="errLast"></div>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="focusedInput">Sport Name (CN)</label>
+                                    <div class="controls">
+                                        <input class="form-control" type="text" name="sport_cn" value="${sports.getNameCN()}" />  
+                                        <div id="errLast"></div>
+                                    </div>
+                                </div>
+                                <!--
+                                <div class="control-group">
+                                    <label class="control-label">Image</label>
+                                    <div class="controls">
+                                        <div class="uploader"><input type="file" name="Image"><span class="filename" style="user-select: none;">No file selected</span><span class="action" style="user-select: none;">Choose File</span></div>
+                                    </div>
+                                </div>
+                                -->
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                    <a class="btn" href="/sports">Cancel</a>
+                                </div>
+                            </fieldset>
+                        </form>
+
+                    </div>
+                </div>
+                <!-- end: Content -->
+            </div><!--/#content.span10-->
+        </div><!--/fluid-row-->
+
+        <#include "footer.html">

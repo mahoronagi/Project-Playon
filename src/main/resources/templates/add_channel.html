@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<#include "header.html">
+
+<body>
+    <!-- start: Header -->
+    <#include "header-menu.html">
+    <!-- start: Header -->
+
+    <div class="container-fluid-full">
+        <div class="row-fluid">
+
+            <!-- start: Main Menu -->
+            <#include "left-menu.html">
+            <!-- end: Main Menu -->
+
+
+            <!-- start: Content -->
+            <div id="content" class="span10">
+
+
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="/index">Home</a> 
+                        <i class="icon-angle-right"></i>
+                    </li>
+                    <li><a href="#">Dashboard</a></li>
+                </ul>
+                <div class="box span11">
+                    <div class="box-header" data-original-title="">
+                        <h2><i class="halflings-icon white edit"></i><span class="break"></span>Edit Password</h2>
+                    </div>
+                    <div class="box-content">
+                        <form class="form-horizontal" method="post"  enctype="multipart/form-data">
+                            <fieldset>
+                                <div class="control-group">
+                                    <label class="control-label" for="focusedInput">Channel name (en)</label>
+                                    <div class="controls">
+                                        <input class="form-control" type="text" name="channel_name_en" />  
+                                        <div id="errLast"></div>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="focusedInput">Channel name (th)</label>
+                                    <div class="controls">
+                                        <input class="form-control" type="text" name="channel_name_th" />  
+                                        <div id="errLast"></div>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="focusedInput">Channel name (cn)</label>
+                                    <div class="controls">
+                                        <input class="form-control" type="text" name="channel_name_cn" />  
+                                        <div id="errLast"></div>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="focusedInput">CH</label>
+                                    <div class="controls">
+                                        <input class="form-control" type="text" name="ch" />  
+                                        <div id="errLast"></div>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="focusedInput">URL stream</label>
+                                    <div class="controls">
+                                        <input class="form-control" type="text" name="url" />  
+                                        <div id="errLast"></div>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">Image</label>
+                                    <div class="controls">
+                                        <div class="uploader">
+                                            <input type="file" name="Image" id="fileUpload">
+                                            <span class="filename" style="user-select: none;">No file selected</span>
+                                            <span class="action" style="user-select: none;">Choose File</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary" onclick="Upload()">Save changes</button>
+                                    <a class="btn" href="channels">Cancel</a>
+                                </div>
+                            </fieldset>
+                        </form>
+
+                    </div>
+                </div>
+                <!-- end: Content -->
+            </div><!--/#content.span10-->
+        </div><!--/fluid-row-->
+        <script type="text/javascript">
+            function Upload() {
+                //Get reference of FileUpload.
+                var fileUpload = document.getElementById("fileUpload");
+
+                //Check whether the file is valid Image.
+                var regex = new RegExp("([a-zA-Z0-9\s_\\.\-:])+(.jpg|.png|.gif)$");
+                if (regex.test(fileUpload.value.toLowerCase())) {
+
+                    //Check whether HTML5 is supported.
+                    if (typeof (fileUpload.files) != "undefined") {
+                        //Initiate the FileReader object.
+                        var reader = new FileReader();
+                        //Read the contents of Image File.
+                        reader.readAsDataURL(fileUpload.files[0]);
+                        reader.onload = function (e) {
+                            //Initiate the JavaScript Image object.
+                            var image = new Image();
+
+                            //Set the Base64 string return from FileReader as source.
+                            image.src = e.target.result;
+
+                            //Validate the File Height and Width.
+                            image.onload = function () {
+                                var height = this.height;
+                                var width = this.width;
+                                if (height > 200 || width > 200) {
+                                    alert("Height and Width must not exceed 100px.");
+                                    return false;
+                                }
+                                alert("Uploaded image has valid Height and Width.");
+                                return true;
+                            };
+
+                        }
+                    } else {
+                        alert("This browser does not support HTML5.");
+                        return false;
+                    }
+                } else {
+                    alert("Please select a valid Image file.");
+                    return false;
+                }
+            }
+        </script>
+        <#include "footer.html">

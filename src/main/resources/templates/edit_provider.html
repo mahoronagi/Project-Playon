@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<#include "header.html">
+
+<body>
+    <!-- start: Header -->
+    <#include "header-menu.html">
+    <!-- start: Header -->
+
+    <div class="container-fluid-full">
+        <div class="row-fluid">
+
+            <!-- start: Main Menu -->
+            <#include "left-menu.html">
+            <!-- end: Main Menu -->
+
+
+            <!-- start: Content -->
+            <div id="content" class="span10">
+
+
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="/index">Home</a> 
+                        <i class="icon-angle-right"></i>
+                    </li>
+                    <li><a href="#">Dashboard</a></li>
+                </ul>
+                <div class="box span11">
+                    <div class="box-header" data-original-title="">
+                        <h2><i class="halflings-icon white edit"></i><span class="break"></span>Edit Provider</h2>
+                    </div>
+                    <div class="box-content">
+                        <form class="form-horizontal" method="post">
+                            <fieldset>
+                                <div class="control-group">
+                                    <label class="control-label" for="focusedInput">Provider Name</label>
+                                    <div class="controls">
+                                        <input class="form-control" type="text" name="provider_name" value="${provider.getName()}" />  
+                                        <div id="errLast"></div>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="focusedInput">Domain</label>
+                                    <div class="controls">
+                                        <input class="form-control" type="text" name="domain" value="${provider.getName()}"/>  
+                                        <div id="errLast"></div>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="focusedInput">IP Host</label>
+                                    <div class="controls">
+                                        <input class="form-control" type="text" name="ip" value="${provider.getIpHost()}"/>  
+                                        <div id="errLast"></div>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="focusedInput">URL</label>
+                                    <div class="controls">
+                                        <input class="form-control" type="text" name="url" value="${provider.getDomain()}"/>  
+                                        <div id="errLast"></div>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="selectError3">Package</label>
+                                    <div class="controls">
+                                        <select id="selectError3" name="p_package">
+                                            <option value="api">api</option>
+                                            <option value="iframe">iframe</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="selectError3">Type</label>
+                                    <div class="controls">
+                                        <select id="selectError3" name="type">
+                                            <option value="api" selected <#if provider.getType() == 'api'> selected </#if>>api</option>
+                                            <option value="iframe" <#if provider.getType() == 'iframe'> selected </#if>>iframe</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="selectError3">TimeExpire</label>
+                                    <div class="controls">
+                                        <select id="p_package_time" name="p_package_time" onchange="sumdate();">
+                                            <option value="30">1 Month</option>
+                                            <option value="90">3 Month</option>
+                                            <option value="180">6 Month</option>
+                                            <option value="365">12 Month</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="date01">Date Expire</label>
+                                    <div class="controls">
+                                        <input type="text" name="date_start" class="input-xlarge datepicker" id="exp" >
+                                    </div>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                    <a class="btn" href="provider">Cancel</a>
+                                </div>
+                            </fieldset>
+                        </form>
+
+                    </div>
+                </div>
+
+
+                <!-- end: Content -->
+            </div><!--/#content.span10-->
+        </div><!--/fluid-row-->
+        <script>
+            function now(){
+                alert("yo");
+                var someDate = new Date();
+                var dd = someDate.getDate();
+                var mm = someDate.getMonth();
+                var y = someDate.getFullYear()-2001;
+                var someFormattedDate = mm + '/'+ dd + '/'+ y;
+                var a = document.getElementById("exp").value=someFormattedDate;
+            }
+            function sumdate(){
+                var someDate = new Date();
+                var numberOfDaysToAdd = document.getElementById("p_package_time").value;
+                
+                someDate.setDate(someDate.getDate() + numberOfDaysToAdd); 
+                var dd = someDate.getDate();
+                var mm = someDate.getMonth();
+                var y = someDate.getFullYear()-2001;
+                var someFormattedDate = mm + '/'+ dd + '/'+ y;
+                var a = document.getElementById("exp").value=someFormattedDate;
+            }
+        </script>
+        <#include "footer.html">

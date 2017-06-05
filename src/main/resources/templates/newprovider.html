@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<#include "header.html">
+
+<body>
+    <!-- start: Header -->
+    <#include "header-menu.html">
+    <!-- start: Header -->
+
+    <div class="container-fluid-full">
+        <div class="row-fluid">
+
+            <!-- start: Main Menu -->
+            <#include "left-menu.html">
+            <!-- end: Main Menu -->
+
+
+            <!-- start: Content -->
+            <div id="content" class="span10">
+
+
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="/index">Home</a> 
+                        <i class="icon-angle-right"></i>
+                    </li>
+                    <li><a href="#">Dashboard</a></li>
+                </ul>
+                <div class="box span11">
+                    <div class="box-header" data-original-title="">
+                        <h2><i class="halflings-icon white edit"></i><span class="break"></span>New Provider</h2>
+                    </div>
+                    <div class="box-content">
+                        <form class="form-horizontal" method="post">
+                            <fieldset>
+                                <div class="control-group">
+                                    <label class="control-label" for="focusedInput">Provider Name</label>
+                                    <div class="controls">
+                                        <input class="form-control" type="text" name="provider_name" />  
+                                        <div id="errLast"></div>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="focusedInput">Domain</label>
+                                    <div class="controls">
+                                        <input class="form-control" type="text" name="domain" />  
+                                        <div id="errLast"></div>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="focusedInput">IP Host</label>
+                                    <div class="controls">
+                                        <input class="form-control" type="text" name="ip" />  
+                                        <div id="errLast"></div>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="focusedInput">URL</label>
+                                    <div class="controls">
+                                        <input class="form-control" type="text" name="url" />  
+                                        <div id="errLast"></div>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="selectError3">Package</label>
+                                    <div class="controls">
+                                        <select id="selectError3" name="p_package">
+                                            <option value="0">api</option>
+                                            <option value="1">iframe</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="selectError3">Type</label>
+                                    <div class="controls">
+                                        <select id="selectError3" name="type">
+                                            <option value="0">api</option>
+                                            <option value="1">iframe</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="selectError3">TimeExpire</label>
+                                    <div class="controls">
+                                        <select id="p_package_time" name="p_package_time" onchange="sumdate();">
+                                            <option value="30">1 Month</option>
+                                            <option value="90">3 Month</option>
+                                            <option value="180">6 Month</option>
+                                            <option value="365">12 Month</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="date01">Date Expire</label>
+                                    <div class="controls">
+                                        <input type="text" name="date_end" class="input-xlarge datepicker" id="exp" >
+                                    </div>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                    <a class="btn" href="provider">Cancel</a>
+                                </div>
+                            </fieldset>
+                        </form>
+
+                    </div>
+                </div>
+
+
+                <!-- end: Content -->
+            </div><!--/#content.span10-->
+        </div><!--/fluid-row-->
+
+        <#include "footer.html">
